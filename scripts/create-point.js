@@ -17,8 +17,12 @@ function populateUFs() {
 
 function getCities(event) {
     const citySelect = document.querySelector('select[name=city]');
+    const stateInput = document.querySelector('input[name=state]');
     const ufID = event.target.value;
     const url = `${IBGE_API_URL}/${ufID}/municipios`
+
+    const indexOfSelectedState = event.target.selectedIndex;
+    stateInput.value = event.target.options[indexOfSelectedState].text;
 
     fetch(url)
         .then(res => res.json())
