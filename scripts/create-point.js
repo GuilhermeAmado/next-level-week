@@ -39,3 +39,30 @@ function getCities(event) {
 populateUFs();
 
 document.querySelector("select[name=uf]").addEventListener("change", getCities);
+
+// itens de coleta
+const itemsToCollect = document.querySelectorAll(".items-grid li");
+
+for (const item of itemsToCollect) {
+  item.addEventListener("click", handleSelectedItem);
+}
+
+let selectedItems = [];
+const collectedItems = document.querySelector('input[name="items"]');
+
+function handleSelectedItem(event) {
+  const itemLi = event.target;
+  const itemID = itemLi.dataset.id;
+
+  itemLi.classList.toggle("selected");
+
+  const alreadySelected = selectedItems.findIndex((item) => item == itemID);
+
+  if (alreadySelected >= 0) {
+    const filteredItems = selectedItems.filter((item) => item != itemID);
+    selectedItems = filteredItems;
+  } else {
+    selectedItems.push(itemID);
+  }
+  collectedItems.value = selectedItems;
+}
