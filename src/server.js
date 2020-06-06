@@ -7,6 +7,9 @@ const db = require('./database/db');
 // configurar pasta publica
 server.use(express.static("public/"));
 
+// habilitar o uso do req.body
+server.use(express.urlencoded({ extended: true }));
+
 // utilizando template engine
 const nunjucks = require("nunjucks");
 nunjucks.configure("src/views", {
@@ -19,10 +22,55 @@ nunjucks.configure("src/views", {
 server.get("/", (req, res) => {
   return res.render("index.html");
 });
+
 // cadastro ponto de coleta
 server.get("/create-point", (req, res) => {
+  // req.query() query strings da URL
+  // console.log(req.query);
+
   return res.render("create-point.html");
 });
+
+server.post("/savepoint", (req, res) => {
+  // req.body: corpo do formulário
+  // console.log(req.body);
+
+  // inserir dados no banco de dados
+  const query = `
+      INSERT INTO places (
+          image,
+          name,
+          address,
+          address2,
+          state,
+          city,
+          items
+      ) VALUES (?,?,?,?,?,?,?);
+  `
+  const values = [
+    req.body.image,
+    req.body.name,
+    req.body.address,
+    req.body.address2,
+    req.body.state,
+    req.body.city,
+    req.body.items
+  ]
+
+  function afterInsertData(err) {
+    if (err) {
+        return console.log(err);
+    }
+
+    console.log("Cadastrado com sucesso");
+    console.log(this);
+    return res.send("ok");
+  }
+
+  db.run(query, values, afterInsertData);
+
+})
+
 // resultados da pesquisa
 server.get("/search-results", (req, res) => {
   // pegar os dados no banco de dados
