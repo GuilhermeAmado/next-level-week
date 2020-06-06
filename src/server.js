@@ -1,4 +1,5 @@
 const express = require("express");
+const port = process.env.PORT || 3000
 const server = express();
 
 // pegar o banco de dados
@@ -97,4 +98,4 @@ server.get("/search-results", (req, res) => {
 });
 
 // ligar o servidor
-server.listen(3000);
+server.listen(port);
