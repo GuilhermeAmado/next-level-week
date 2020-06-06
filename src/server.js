@@ -73,8 +73,16 @@ server.post("/savepoint", (req, res) => {
 
 // resultados da pesquisa
 server.get("/search-results", (req, res) => {
+
+  const search = req.query.search;
+
+  if (search == "") {
+    // pesquisa vazia
+    return res.render("search-results.html", { total: 0 });
+  }
+
   // pegar os dados no banco de dados
-  db.all(`SELECT * FROM places`, function(err, rows) {
+  db.all(`SELECT * FROM places WHERE city LIKE '%${search}%'`, function(err, rows) {
       if (err) {
           console.log(err);
           return res.send("Erro no cadastro!")
