@@ -64,7 +64,7 @@ server.post("/savepoint", (req, res) => {
 
     console.log("Cadastrado com sucesso");
     console.log(this);
-    return res.send("ok");
+    return res.render("create-point.html", { saved: true });
   }
 
   db.run(query, values, afterInsertData);
@@ -76,7 +76,8 @@ server.get("/search-results", (req, res) => {
   // pegar os dados no banco de dados
   db.all(`SELECT * FROM places`, function(err, rows) {
       if (err) {
-          return console.log(err);
+          console.log(err);
+          return res.send("Erro no cadastro!")
       }
 
       const total = rows.length;
